@@ -12,3 +12,8 @@ export interface JobApplication {
   status: ApplicationStatus;
   notes?: string | null;
 }
+
+export type ApplicationFormData = Pick<
+  JobApplication,
+  "company" | "position"
+>;

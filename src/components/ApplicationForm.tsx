@@ -1,13 +1,18 @@
 
 import { useState } from "react";
 import type { ChangeEvent, SubmitEvent } from "react";
+import type { ApplicationFormData } from "../types/JobApplication";
 
-function ApplicationForm() {
+interface ApplicationFormProps {
+  onAddApplication: (data: ApplicationFormData) => void;
+}
+
+function ApplicationForm({ onAddApplication }: ApplicationFormProps) {
 
     const [company, setCompany] = useState<string>("");
     const [position, setPosition] = useState<string>("");
 
-
+    
   function handleCompanyChange(
     event: ChangeEvent<HTMLInputElement>
   ): void {
@@ -24,7 +29,15 @@ function ApplicationForm() {
   function handleSubmit(event: SubmitEvent<HTMLFormElement>): void {
   event.preventDefault();
 
-  console.log(` Company: ${company}, Position: ${position}`);
+    if (!company.trim() || !position.trim()) {
+    return;
+  }
+
+  onAddApplication({
+    company: company.trim(),
+    position: position.trim(),
+  });
+
     setCompany("");
   setPosition("");
 }
