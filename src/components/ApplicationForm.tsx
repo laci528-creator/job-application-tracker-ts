@@ -1,6 +1,6 @@
 
 import { useState } from "react";
-import type { ChangeEvent, FormEvent } from "react";
+import type { ChangeEvent, SubmitEvent } from "react";
 
 function ApplicationForm() {
 
@@ -21,7 +21,7 @@ function ApplicationForm() {
   }
 
 
-  function handleSubmit(event: FormEvent<HTMLFormElement>): void {
+  function handleSubmit(event: SubmitEvent<HTMLFormElement>): void {
   event.preventDefault();
 
   console.log(` Company: ${company}, Position: ${position}`);
