@@ -1,8 +1,9 @@
 
 import { useState } from "react";
-import type { ApplicationFormData, JobApplication } from "../types/JobApplication";
+import type { ApplicationFormData, JobApplication, ApplicationStatus } from "../types/JobApplication";
 import JobApplicationCard from "./JobApplicationCard";
 import ApplicationForm from "./ApplicationForm";
+
 
 
 function ApplicationList() {
@@ -20,6 +21,21 @@ function addApplication(data: ApplicationFormData): void {
   setApplications((prev) => [...prev, newApplication]);
 }
 
+function updateApplicationStatus(id: number, newStatus: ApplicationStatus): void {
+
+  setApplications((prev) =>
+    prev.map((application) =>
+      application.id === id ? { ...application, status: newStatus } : application
+    )
+  );
+}
+
+function deleteApplication(id: number): void {
+  setApplications((prev) =>
+    prev.filter((application) => application.id !== id)
+  );
+}
+
   return (
     <section>
       <h1>Job Application Tracker</h1>
@@ -30,6 +46,8 @@ function addApplication(data: ApplicationFormData): void {
 
       {applications.map((application) => (
         <JobApplicationCard
+          onDelete={deleteApplication}
+          onStatusChange={updateApplicationStatus}
           key={application.id}
           application={application}
         />

@@ -39,7 +39,7 @@ function ApplicationForm({ onAddApplication }: ApplicationFormProps) {
   });
 
     setCompany("");
-  setPosition("");
+    setPosition("");
 }
 
   return (
