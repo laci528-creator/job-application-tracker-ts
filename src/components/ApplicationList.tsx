@@ -20,15 +20,26 @@ import type { ChangeEvent } from "react";
     }
   }
 
+  type FilterStatus = ApplicationStatus | "all";
+
+    function isFilterStatus(value: string): value is FilterStatus {
+  return (
+    value === "all" ||
+    value === "applied" ||
+    value === "interview" ||
+    value === "offer" ||
+    value === "rejected"
+  );
+}
+
 
 function ApplicationList() {
 
-  type FilterStatus = ApplicationStatus | "all";
+  
   const [applications, setApplications] =
       useState<JobApplication[]>(getInitialApplications);
 
   const [filterStatus, setFilterStatus] = useState<FilterStatus>("all");
-      
 
 useEffect(() => {
   localStorage.setItem(
@@ -65,7 +76,11 @@ function deleteApplication(id: number): void {
 
 
 function handleSearch(event: ChangeEvent<HTMLSelectElement>): void {
-      setFilterStatus(event.target.value as FilterStatus);
+  const value = event.target.value;
+  if (!isFilterStatus(value)) {
+    return;
+  }
+      setFilterStatus(value);
 }
 
 const filteredApplications = applications.filter((application) => {
