@@ -142,6 +142,7 @@ function updateApplication(
           onStatusChange={updateApplicationStatus}
           key={application.id}
           application={application}
+          onSave={updateApplication}
         />
       ))}
     </section>

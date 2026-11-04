@@ -20,3 +20,8 @@ export type ApplicationFormData = Pick<
 
 export type ApplicationUpdate = Partial<Omit<JobApplication, "id">>;
 
+export interface ApplicationEditFormProps {
+  application: JobApplication;
+  onSave: (id: number, changes: ApplicationUpdate) => void;
+  onCancel: () => void;
+}
