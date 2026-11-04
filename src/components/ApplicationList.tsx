@@ -3,6 +3,7 @@ import { useState, useEffect } from "react";
 import type { ApplicationFormData, JobApplication, ApplicationStatus } from "../types/JobApplication";
 import JobApplicationCard from "./JobApplicationCard";
 import ApplicationForm from "./ApplicationForm";
+import type { ChangeEvent } from "react";
 
   function getInitialApplications(): JobApplication[] {
     const savedData = localStorage.getItem("jobApplications");
@@ -21,8 +22,12 @@ import ApplicationForm from "./ApplicationForm";
 
 
 function ApplicationList() {
+
+  type FilterStatus = ApplicationStatus | "all";
   const [applications, setApplications] =
       useState<JobApplication[]>(getInitialApplications);
+
+  const [filterStatus, setFilterStatus] = useState<FilterStatus>("all");
       
 
 useEffect(() => {
@@ -58,15 +63,39 @@ function deleteApplication(id: number): void {
   );
 }
 
+
+function handleSearch(event: ChangeEvent<HTMLSelectElement>): void {
+      setFilterStatus(event.target.value as FilterStatus);
+}
+
+const filteredApplications = applications.filter((application) => {
+    if (filterStatus === "all") return true;
+    return application.status === filterStatus;
+  });
+
+
   return (
     <section>
       <h1>Job Application Tracker</h1>
+
+
+      <select
+        value={filterStatus}
+        onChange={handleSearch}
+      >
+        <option value="all">All</option>
+        <option value="applied">Applied</option>
+        <option value="interview">Interviewing</option>
+        <option value="offer">Offered</option>
+        <option value="rejected">Rejected</option>
+      </select>
+
       <ApplicationForm onAddApplication={addApplication} />
 
-      <p>Applications: {applications.length}</p>
+      <p>Applications: {filteredApplications.length}</p>
 
 
-      {applications.map((application) => (
+      {filteredApplications.map((application) => (
         <JobApplicationCard
           onDelete={deleteApplication}
           onStatusChange={updateApplicationStatus}
