@@ -1,14 +1,36 @@
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import type { ApplicationFormData, JobApplication, ApplicationStatus } from "../types/JobApplication";
 import JobApplicationCard from "./JobApplicationCard";
 import ApplicationForm from "./ApplicationForm";
 
+  function getInitialApplications(): JobApplication[] {
+    const savedData = localStorage.getItem("jobApplications");
+
+    
+    if (savedData === null) {
+      return [];
+    }
+
+    try {
+      return JSON.parse(savedData) as JobApplication[];
+    } catch {
+      return [];
+    }
+  }
 
 
 function ApplicationList() {
   const [applications, setApplications] =
-    useState<JobApplication[]>([]);
+      useState<JobApplication[]>(getInitialApplications);
+      
+
+useEffect(() => {
+  localStorage.setItem(
+    "jobApplications",
+    JSON.stringify(applications)
+  );
+}, [applications]);
 
 function addApplication(data: ApplicationFormData): void {
   const newApplication: JobApplication = {
