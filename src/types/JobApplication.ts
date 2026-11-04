@@ -17,3 +17,6 @@ export type ApplicationFormData = Pick<
   JobApplication,
   "company" | "position"
 >;
+
+export type ApplicationUpdate = Partial<Omit<JobApplication, "id">>;
+

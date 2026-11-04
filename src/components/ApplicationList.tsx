@@ -1,6 +1,6 @@
 
 import { useState, useEffect } from "react";
-import type { ApplicationFormData, JobApplication, ApplicationStatus } from "../types/JobApplication";
+import type { ApplicationFormData, JobApplication, ApplicationStatus, ApplicationUpdate } from "../types/JobApplication";
 import JobApplicationCard from "./JobApplicationCard";
 import ApplicationForm from "./ApplicationForm";
 import type { ChangeEvent } from "react";
@@ -40,6 +40,15 @@ function ApplicationList() {
       useState<JobApplication[]>(getInitialApplications);
 
   const [filterStatus, setFilterStatus] = useState<FilterStatus>("all");
+
+
+const statusCount: Record<ApplicationStatus, number> = {
+    applied: applications.filter((app) => app.status === "applied").length,
+    interview: applications.filter((app) => app.status === "interview").length,
+    offer: applications.filter((app) => app.status === "offer").length,
+    rejected: applications.filter((app) => app.status === "rejected").length,
+};
+
 
 useEffect(() => {
   localStorage.setItem(
@@ -89,10 +98,27 @@ const filteredApplications = applications.filter((application) => {
   });
 
 
+function updateApplication(
+  id: number,
+  changes: ApplicationUpdate
+): void {
+  setApplications((prev) =>
+    prev.map((application) =>
+      application.id === id ? { ...application, ...changes } : application
+    )
+  );
+}
+
+
   return (
     <section>
       <h1>Job Application Tracker</h1>
-
+      <div>
+        <p>Applied: {statusCount.applied}</p>
+        <p>Interviewing: {statusCount.interview}</p>
+        <p>Offered: {statusCount.offer}</p>
+        <p>Rejected: {statusCount.rejected}</p>
+      </div>
 
       <select
         value={filterStatus}
