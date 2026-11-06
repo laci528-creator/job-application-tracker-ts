@@ -1,5 +1,5 @@
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import type { ApplicationFormData, JobApplication, ApplicationStatus, ApplicationUpdate } from "../types/JobApplication";
 import JobApplicationCard from "./JobApplicationCard";
 import ApplicationForm from "./ApplicationForm";
@@ -42,12 +42,15 @@ function ApplicationList() {
   const [filterStatus, setFilterStatus] = useState<FilterStatus>("all");
 
 
-const statusCount: Record<ApplicationStatus, number> = {
+const statusCount = useMemo(() => {
+  const counts: Record<ApplicationStatus, number> = {
     applied: applications.filter((app) => app.status === "applied").length,
     interview: applications.filter((app) => app.status === "interview").length,
     offer: applications.filter((app) => app.status === "offer").length,
     rejected: applications.filter((app) => app.status === "rejected").length,
-};
+  };
+  return counts;
+}, [applications]);
 
 
 useEffect(() => {
@@ -92,10 +95,12 @@ function handleSearch(event: ChangeEvent<HTMLSelectElement>): void {
       setFilterStatus(value);
 }
 
-const filteredApplications = applications.filter((application) => {
+
+const filteredApplications = useMemo(() => {
+  return applications.filter((application) => {
     if (filterStatus === "all") return true;
     return application.status === filterStatus;
-  });
+  })}, [applications, filterStatus]);
 
 
 function updateApplication(
