@@ -4,6 +4,7 @@ import type { ApplicationFormData, JobApplication, ApplicationStatus, Applicatio
 import JobApplicationCard from "./JobApplicationCard";
 import ApplicationForm from "./ApplicationForm";
 import type { ChangeEvent } from "react";
+import { useCallback } from "react";
 
   function getInitialApplications(): JobApplication[] {
     const savedData = localStorage.getItem("jobApplications");
@@ -70,7 +71,7 @@ function addApplication(data: ApplicationFormData): void {
 
   setApplications((prev) => [...prev, newApplication]);
 }
-
+/*
 function updateApplicationStatus(id: number, newStatus: ApplicationStatus): void {
 
   setApplications((prev) =>
@@ -78,13 +79,33 @@ function updateApplicationStatus(id: number, newStatus: ApplicationStatus): void
       application.id === id ? { ...application, status: newStatus } : application
     )
   );
-}
+}*/
 
-function deleteApplication(id: number): void {
+const updateApplicationStatus = useCallback(
+  (id: number, newStatus: ApplicationStatus): void => {
+    setApplications((prev) => prev.map((application) =>
+      application.id === id ? { ...application, status: newStatus } : application
+    ));
+  },
+  []
+);  
+
+
+
+/*function deleteApplication(id: number): void {
   setApplications((prev) =>
     prev.filter((application) => application.id !== id)
   );
-}
+}*/
+
+const deleteApplication = useCallback(
+  (id: number): void => {
+    setApplications((prev) =>
+      prev.filter((application) => application.id !== id)
+    );
+  },
+  []
+);
 
 
 function handleSearch(event: ChangeEvent<HTMLSelectElement>): void {
@@ -102,7 +123,7 @@ const filteredApplications = useMemo(() => {
     return application.status === filterStatus;
   })}, [applications, filterStatus]);
 
-
+/*
 function updateApplication(
   id: number,
   changes: ApplicationUpdate
@@ -112,7 +133,16 @@ function updateApplication(
       application.id === id ? { ...application, ...changes } : application
     )
   );
-}
+}*/
+
+const updateApplication = useCallback(
+  (id: number, changes: ApplicationUpdate): void => {
+    setApplications((prev) => prev.map((application) =>
+      application.id === id ? { ...application, ...changes } : application
+    ));
+  },
+  []
+);  
 
 
   return (
