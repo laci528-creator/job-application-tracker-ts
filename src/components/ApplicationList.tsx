@@ -79,7 +79,7 @@ function updateApplicationStatus(id: number, newStatus: ApplicationStatus): void
       application.id === id ? { ...application, status: newStatus } : application
     )
   );
-}*/
+}*/ 
 
 const updateApplicationStatus = useCallback(
   (id: number, newStatus: ApplicationStatus): void => {
@@ -90,13 +90,6 @@ const updateApplicationStatus = useCallback(
   []
 );  
 
-
-
-/*function deleteApplication(id: number): void {
-  setApplications((prev) =>
-    prev.filter((application) => application.id !== id)
-  );
-}*/
 
 const deleteApplication = useCallback(
   (id: number): void => {
@@ -123,17 +116,6 @@ const filteredApplications = useMemo(() => {
     return application.status === filterStatus;
   })}, [applications, filterStatus]);
 
-/*
-function updateApplication(
-  id: number,
-  changes: ApplicationUpdate
-): void {
-  setApplications((prev) =>
-    prev.map((application) =>
-      application.id === id ? { ...application, ...changes } : application
-    )
-  );
-}*/
 
 const updateApplication = useCallback(
   (id: number, changes: ApplicationUpdate): void => {

@@ -1,6 +1,6 @@
 
 import type { JobApplication, ApplicationStatus, ApplicationUpdate } from "../types/JobApplication";
-import { useState, type ChangeEvent } from "react";
+import { useState, memo, type ChangeEvent } from "react";
 import ApplicationEditForm from "./ApplicationEditForm";
 
 interface JobApplicationCardProps {
@@ -41,6 +41,11 @@ function handleSave(
   onSave(id, changes);
   setIsEditing(false);
 }
+
+console.log(
+  "JobApplicationCard rendered:",
+  application.company
+);
 
 
 return (
@@ -86,4 +91,4 @@ return (
 
 }
 
-export default JobApplicationCard;
+export default memo(JobApplicationCard);
