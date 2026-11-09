@@ -1,10 +1,9 @@
 
-import { useState, useEffect, useMemo } from "react";
+import { useState, useEffect, useMemo, useReducer, type ChangeEvent, useCallback } from "react";
 import type { ApplicationFormData, JobApplication, ApplicationStatus, ApplicationUpdate } from "../types/JobApplication";
 import JobApplicationCard from "./JobApplicationCard";
 import ApplicationForm from "./ApplicationForm";
-import type { ChangeEvent } from "react";
-import { useCallback } from "react";
+import { applicationReducer } from "../reducers/applicationReducer";
 
   function getInitialApplications(): JobApplication[] {
     const savedData = localStorage.getItem("jobApplications");
@@ -36,9 +35,12 @@ import { useCallback } from "react";
 
 function ApplicationList() {
 
-  
-  const [applications, setApplications] =
-      useState<JobApplication[]>(getInitialApplications);
+
+const [applications, dispatch] = useReducer(
+  applicationReducer,
+  undefined,
+  getInitialApplications
+);
 
   const [filterStatus, setFilterStatus] = useState<FilterStatus>("all");
 
@@ -69,33 +71,20 @@ function addApplication(data: ApplicationFormData): void {
     status: "applied",
   };
 
-  setApplications((prev) => [...prev, newApplication]);
+  dispatch({ type: "add", data: newApplication });
 }
-/*
-function updateApplicationStatus(id: number, newStatus: ApplicationStatus): void {
 
-  setApplications((prev) =>
-    prev.map((application) =>
-      application.id === id ? { ...application, status: newStatus } : application
-    )
-  );
-}*/ 
 
 const updateApplicationStatus = useCallback(
   (id: number, newStatus: ApplicationStatus): void => {
-    setApplications((prev) => prev.map((application) =>
-      application.id === id ? { ...application, status: newStatus } : application
-    ));
+    dispatch({ type: "updateStatus", data: { id, newStatus } });
   },
   []
-);  
+);
 
 
 const deleteApplication = useCallback(
-  (id: number): void => {
-    setApplications((prev) =>
-      prev.filter((application) => application.id !== id)
-    );
+  (id: number): void => { dispatch ({ type: "delete", data: id });
   },
   []
 );
@@ -119,9 +108,7 @@ const filteredApplications = useMemo(() => {
 
 const updateApplication = useCallback(
   (id: number, changes: ApplicationUpdate): void => {
-    setApplications((prev) => prev.map((application) =>
-      application.id === id ? { ...application, ...changes } : application
-    ));
+    dispatch ({ type: "update", data: { id, changes } });
   },
   []
 );  
