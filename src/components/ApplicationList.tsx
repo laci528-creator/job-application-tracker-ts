@@ -1,24 +1,10 @@
 
-import { useState, useEffect, useMemo, useReducer, type ChangeEvent, useCallback } from "react";
-import type { ApplicationFormData, JobApplication, ApplicationStatus, ApplicationUpdate } from "../types/JobApplication";
+import { useState, useMemo, type ChangeEvent } from "react";
+import type { ApplicationStatus } from "../types/JobApplication";
 import JobApplicationCard from "./JobApplicationCard";
 import ApplicationForm from "./ApplicationForm";
-import { applicationReducer } from "../reducers/applicationReducer";
+import { useApplications } from "../hooks/useApplications";
 
-  function getInitialApplications(): JobApplication[] {
-    const savedData = localStorage.getItem("jobApplications");
-
-    
-    if (savedData === null) {
-      return [];
-    }
-
-    try {
-      return JSON.parse(savedData) as JobApplication[];
-    } catch {
-      return [];
-    }
-  }
 
   type FilterStatus = ApplicationStatus | "all";
 
@@ -35,14 +21,15 @@ import { applicationReducer } from "../reducers/applicationReducer";
 
 function ApplicationList() {
 
+  const {
+  applications,
+  addApplication,
+  deleteApplication,
+  updateApplication,
+  updateApplicationStatus,
+} = useApplications();
 
-const [applications, dispatch] = useReducer(
-  applicationReducer,
-  undefined,
-  getInitialApplications
-);
-
-  const [filterStatus, setFilterStatus] = useState<FilterStatus>("all");
+const [filterStatus, setFilterStatus] = useState<FilterStatus>("all");
 
 
 const statusCount = useMemo(() => {
@@ -54,40 +41,6 @@ const statusCount = useMemo(() => {
   };
   return counts;
 }, [applications]);
-
-
-useEffect(() => {
-  localStorage.setItem(
-    "jobApplications",
-    JSON.stringify(applications)
-  );
-}, [applications]);
-
-function addApplication(data: ApplicationFormData): void {
-  const newApplication: JobApplication = {
-    id: Date.now(),
-    company: data.company,
-    position: data.position,
-    status: "applied",
-  };
-
-  dispatch({ type: "add", data: newApplication });
-}
-
-
-const updateApplicationStatus = useCallback(
-  (id: number, newStatus: ApplicationStatus): void => {
-    dispatch({ type: "updateStatus", data: { id, newStatus } });
-  },
-  []
-);
-
-
-const deleteApplication = useCallback(
-  (id: number): void => { dispatch ({ type: "delete", data: id });
-  },
-  []
-);
 
 
 function handleSearch(event: ChangeEvent<HTMLSelectElement>): void {
@@ -104,14 +57,6 @@ const filteredApplications = useMemo(() => {
     if (filterStatus === "all") return true;
     return application.status === filterStatus;
   })}, [applications, filterStatus]);
-
-
-const updateApplication = useCallback(
-  (id: number, changes: ApplicationUpdate): void => {
-    dispatch ({ type: "update", data: { id, changes } });
-  },
-  []
-);  
 
 
   return (
