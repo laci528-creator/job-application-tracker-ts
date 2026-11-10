@@ -14,7 +14,6 @@ interface JobApplicationCardProps {
     id: number, 
     changes: ApplicationUpdate
   ) => void;  
-
 }
 
 function JobApplicationCard({
@@ -24,7 +23,7 @@ function JobApplicationCard({
   onSave
 }: JobApplicationCardProps) {
 
-  const [isEditing, setIsEditing] = useState<boolean>(false);
+const [isEditing, setIsEditing] = useState<boolean>(false);
 
 function handleStatusChange(
   event: ChangeEvent<HTMLSelectElement>,
@@ -87,8 +86,6 @@ return (
       </button>
     </article>
   ));
-
-
 }
 
 export default memo(JobApplicationCard);

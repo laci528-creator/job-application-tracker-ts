@@ -1,14 +1,13 @@
-
 import { useState, useMemo, type ChangeEvent } from "react";
 import type { ApplicationStatus } from "../types/JobApplication";
 import JobApplicationCard from "./JobApplicationCard";
 import ApplicationForm from "./ApplicationForm";
-import { useApplications } from "../hooks/useApplications";
+import { useApplicationsContext } from "../hooks/useApplicationsContext";
 
 
-  type FilterStatus = ApplicationStatus | "all";
+type FilterStatus = ApplicationStatus | "all";
 
-    function isFilterStatus(value: string): value is FilterStatus {
+function isFilterStatus(value: string): value is FilterStatus {
   return (
     value === "all" ||
     value === "applied" ||
@@ -18,19 +17,17 @@ import { useApplications } from "../hooks/useApplications";
   );
 }
 
-
 function ApplicationList() {
 
-  const {
+const {
   applications,
   addApplication,
   deleteApplication,
   updateApplication,
   updateApplicationStatus,
-} = useApplications();
+} = useApplicationsContext();
 
 const [filterStatus, setFilterStatus] = useState<FilterStatus>("all");
-
 
 const statusCount = useMemo(() => {
   const counts: Record<ApplicationStatus, number> = {
@@ -50,7 +47,6 @@ function handleSearch(event: ChangeEvent<HTMLSelectElement>): void {
   }
       setFilterStatus(value);
 }
-
 
 const filteredApplications = useMemo(() => {
   return applications.filter((application) => {
@@ -84,7 +80,6 @@ const filteredApplications = useMemo(() => {
 
       <p>Applications: {filteredApplications.length}</p>
 
-
       {filteredApplications.map((application) => (
         <JobApplicationCard
           onDelete={deleteApplication}
@@ -97,5 +92,6 @@ const filteredApplications = useMemo(() => {
     </section>
   );
 }
+
 
 export default ApplicationList;
