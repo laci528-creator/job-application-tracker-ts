@@ -25,6 +25,7 @@ const {
   deleteApplication,
   updateApplication,
   updateApplicationStatus,
+  storageError
 } = useApplicationsContext();
 
 const [filterStatus, setFilterStatus] = useState<FilterStatus>("all");
@@ -64,6 +65,11 @@ const filteredApplications = useMemo(() => {
         <p>Offered: {statusCount.offer}</p>
         <p>Rejected: {statusCount.rejected}</p>
       </div>
+      {storageError && (
+        <p role="alert" className="error-message">
+          {storageError}
+        </p>
+      )}
 
       <select
         value={filterStatus}

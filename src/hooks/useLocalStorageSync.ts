@@ -6,6 +6,7 @@ export function useLocalStorageSync<T>(key: string, value: T): string | null {
 
     useEffect(() => {
         try {
+            throw new Error("Test: localStorage saving failed!");
             localStorage.setItem(key, JSON.stringify(value));
             setError(null);
         } catch (error: unknown) {

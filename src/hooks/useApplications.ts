@@ -28,7 +28,10 @@ export function useApplications() {
     getInitialApplications
   );
 
-  useLocalStorageSync("jobApplications", applications);
+  const storageError = useLocalStorageSync(
+  "jobApplications",
+  applications
+);
 
 const addApplication = useCallback(
   (data: ApplicationFormData): void => {
@@ -72,5 +75,6 @@ const deleteApplication = useCallback(
     deleteApplication,
     updateApplication,
     updateApplicationStatus,
+    storageError,
   };
 }
