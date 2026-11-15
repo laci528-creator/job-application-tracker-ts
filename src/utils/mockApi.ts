@@ -17,10 +17,17 @@ const mockApplications: JobApplication[] = [
     }
 ];
 
+function delay(ms:number): Promise<void> {
+    return new Promise<void>((resolve) => {
+        setTimeout(resolve, ms);
+    })
+}
+
 export async function fetchApplications(): Promise<JobApplication[]> {
 
     try {
-        const apiAntwort = await Promise.resolve(mockApplications);
+        const apiAntwort = mockApplications;
+        await delay(1500);
         console.log(apiAntwort);
         return apiAntwort;
     } catch (error: unknown) {
