@@ -1,69 +1,67 @@
 import { useState } from "react";
 import { fetchApplications } from "../utils/mockApi";
-import type { JobApplication } from "../types/JobApplication";
+import type { LoadingState } from "../types/LoadingState";
 
 
 
 function MockApplicationsDemo() {
 
-    const [isLoading, setIsLoading] = useState(false);
-    const [error, setError] = useState<string | null>(null);
-    const [applications, setApplications] =
-        useState<JobApplication[]>([]);
+    const [state, setState] = useState<LoadingState>({
+        status: "idle"
+    });
 
     async function loadApplications(): Promise<void> {
 
-        setIsLoading(true);
-        setError(null);
-        setApplications([]);
+        setState({ status: "loading" });
+
 
         try {
             const result = await fetchApplications();
             console.log(result);
-            setApplications(result);
+
+            setState({ status: "success", data: result });
 
         } catch (error: unknown) {
             if (error instanceof Error) {
                 console.error(error.message);
-                setError(error.message);
+                setState({ status: "error", message: error.message });
 
             } else {
                 console.error("Unknown error:", error);
-                setError("An unknown error occurred");
+                setState({ status: "error", message: "An unknown error occurred" });
             }
 
         }
-        finally {
-            setIsLoading(false);
-        }
-
     }
 
     return (
 
         <div className="button-container">
-            {isLoading && (
+            {state.status === "loading" && (
                 <p role="status">Loading applications...</p>
             )}
-            {error && (
+            {state.status === "error" && (
                 <p role="alert" className="error-message">
-                    {error}
+                    {state.message}
                 </p>
             )}
 
-            <button onClick={loadApplications} disabled={isLoading}>
-                {isLoading ? "Loading..." : "Load applications"}
+            <button onClick={loadApplications} disabled={state.status === "loading"}>
+                {state.status === "loading" ? "Loading..." : "Load applications"}
             </button>
 
-            <div>
-                {applications.map(application => (
-                    <div key={application.id}>
-                        <p>{application.company}</p>
-                        <p>{application.position}</p>
-                        <p>{application.status}</p>
-                    </div>
-                ))}
-            </div>
+            {state.status === "success" && (
+                <div>
+                    {state.data.map(application => (
+                        <div key={application.id}>
+                            <p>{application.company}</p>
+                            <p>{application.position}</p>
+                            <p>{application.status}</p>
+                        </div>
+                    ))}
+                </div>
+            )}
+
         </div>
 
     )
