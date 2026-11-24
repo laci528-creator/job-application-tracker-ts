@@ -14,7 +14,6 @@ function MockApplicationsDemo() {
 
         setState({ status: "loading" });
 
-
         try {
             const result = await fetchApplications();
             console.log(result);
