@@ -43,3 +43,15 @@ export function isJobApplication(
         );
 
 }
+
+export function isJobApplicationArray(
+    value: unknown
+): value is JobApplication[] {
+
+    return ( Array.isArray(value) &&
+        value.every(
+            application => isJobApplication(application)
+        )
+    );
+
+}
