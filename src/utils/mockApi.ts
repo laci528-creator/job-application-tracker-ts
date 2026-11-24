@@ -1,4 +1,5 @@
 import type { JobApplication } from "../types/JobApplication";
+import { isJobApplicationArray } from "./validation";
 
 const mockApplications: JobApplication[] = [
     {
@@ -26,10 +27,16 @@ function delay(ms:number): Promise<void> {
 export async function fetchApplications(): Promise<JobApplication[]> {
 
     try {
-        const apiAntwort = mockApplications;
+        const apiAntwort: unknown = mockApplications;
         await delay(1500);
         console.log(apiAntwort);
+        
+        if (!isJobApplicationArray(apiAntwort)) {
+            throw new Error("Invalid API response");
+        }
+
         return apiAntwort;
+
     } catch (error: unknown) {
         if (error instanceof Error) {
             console.error(error.message);
