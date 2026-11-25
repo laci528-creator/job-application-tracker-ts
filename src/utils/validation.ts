@@ -43,7 +43,7 @@ export function isJobApplication(
         );
 
 }
-
+/*
 export function isJobApplicationArray(
     value: unknown
 ): value is JobApplication[] {
@@ -53,5 +53,25 @@ export function isJobApplicationArray(
             application => isJobApplication(application)
         )
     );
+
+}
+*/
+
+export function isArrayOf<T>(
+    value: unknown,
+    validator: (item: unknown) => item is T
+): value is T[] {
+    return (
+        Array.isArray(value) &&
+        value.every(validator)
+    );
+
+}
+
+export function isJobApplicationArray(
+    value: unknown
+): value is JobApplication[] {
+
+    return isArrayOf(value, isJobApplication);
 
 }
