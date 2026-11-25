@@ -1,7 +1,6 @@
-import type { JobApplication  } from "./JobApplication";
 
-export type LoadingState =
+export type LoadingState<T> =
     | { status: "idle" }
     | { status: "loading" }
-    | { status: "success"; data: JobApplication[] }
+    | { status: "success"; data: T }
     | { status: "error"; message: string };

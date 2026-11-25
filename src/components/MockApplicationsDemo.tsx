@@ -1,12 +1,14 @@
 import { useState } from "react";
 import { fetchApplications } from "../utils/mockApi";
 import type { LoadingState } from "../types/LoadingState";
+import type { JobApplication  } from "../types/JobApplication";
+
 
 
 
 function MockApplicationsDemo() {
 
-    const [state, setState] = useState<LoadingState>({
+    const [state, setState] = useState<LoadingState<JobApplication[]>>({
         status: "idle"
     });
 
