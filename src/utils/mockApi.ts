@@ -1,3 +1,4 @@
+import JobApplicationCard from "../components/JobApplicationCard";
 import type { JobApplication } from "../types/JobApplication";
 import { isJobApplicationArray } from "./validation";
 
@@ -23,9 +24,8 @@ function delay(ms:number): Promise<void> {
         setTimeout(resolve, ms);
     })
 }
-
+/*
 export async function fetchApplications(): Promise<JobApplication[]> {
-
     try {
         const apiAntwort: unknown = mockApplications;
         await delay(1500);
@@ -42,7 +42,23 @@ export async function fetchApplications(): Promise<JobApplication[]> {
             console.error(error.message);
         }
         throw error;
-
     }
+}*/
+
+
+export async function fetchValidatedData<T>(
+    data: unknown,
+    validator: (value: unknown) => value is T
+): Promise<T> {
+    await delay(1500);
+    if(!validator(data)){
+        throw new Error("Invalid API response");
+    }
+    return data;
+}
+
+export async function fetchApplications(): Promise<JobApplication[]> {
+
+    return (fetchValidatedData(mockApplications, isJobApplicationArray));
 
 }
