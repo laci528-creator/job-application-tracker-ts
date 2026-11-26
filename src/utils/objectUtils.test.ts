@@ -1,4 +1,10 @@
-import { describe, it, expect, beforeEach } from "vitest";
+import {
+    describe,
+    it,
+    expect,
+    beforeEach,
+    expectTypeOf
+} from "vitest";
 import { getProperty } from "./objectUtils";
 
 interface Product {
@@ -25,37 +31,49 @@ describe("getProperty", () => {
 
     it("should return the id property", () => {
         // Act
-        const result = getProperty(product,"id");
+        const result = getProperty(product, "id");
 
         // Assert
         expect(result).toBe(1);
 
+        // Type assertion
+        expectTypeOf(result).toEqualTypeOf<number>();
+
     });
 
     it("should return the name property", () => {
-                // Act
-        const result = getProperty(product,"name");
+        // Act
+        const result = getProperty(product, "name");
 
         // Assert
         expect(result).toBe("Laptop");
 
+        // Type assertion
+        expectTypeOf(result).toEqualTypeOf<string>();
+
     });
 
     it("should return the price property", () => {
-                // Act
-        const result = getProperty(product,"price");
+        // Act
+        const result = getProperty(product, "price");
 
         // Assert
         expect(result).toBe(800);
 
+        // Type assertion
+        expectTypeOf(result).toEqualTypeOf<number>();
+
     });
 
     it("should return the available property", () => {
-                // Act
-        const result = getProperty(product,"available");
+        // Act
+        const result = getProperty(product, "available");
 
         // Assert
         expect(result).toBe(true);
+
+        // Type assertion
+        expectTypeOf(result).toEqualTypeOf<boolean>();
 
     });
 
