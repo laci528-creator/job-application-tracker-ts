@@ -1,4 +1,4 @@
-import JobApplicationCard from "../components/JobApplicationCard";
+
 import type { JobApplication } from "../types/JobApplication";
 import { isJobApplicationArray } from "./validation";
 
